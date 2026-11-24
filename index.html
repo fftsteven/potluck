@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thanksgiving Potluck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: warm, friendly, a little playful; a sign-up sheet first
+IDEA: a pinned church-hall sign-up sheet crossed with an 8-bit game screen
+PICTURE: animated pixel turkey fanning its tail beside the event card; the sign-up list is the working thing
+COLOUR and TYPE: pumpkin #e2582a band, deep brown ink, mustard accent; Silkscreen titles, Work Sans body
+LAYOUT: pumpkin hero band with title + details left, turkey right; list below in one column; roster at the end
+*/
+:root{color-scheme:light dark;
+--bg:light-dark(#fff8ef,#1d120b);--panel:light-dark(#ffffff,#2a1a10);--ink:light-dark(#2a160c,#f7e9da);
+--mute:light-dark(#7a5a46,#c9ab93);--line:light-dark(#ecdccb,#43291a);--pump:#e2582a;--pumpd:light-dark(#c4441a,#b8401a);
+--mus:#f2b631;--leaf:#5f7f3a;--done:light-dark(#eef3e6,#24301a)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Work Sans",system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:960px;margin:0 auto}
+.hero{background:var(--pump);color:#fff;background-image:repeating-linear-gradient(90deg,transparent 0 22px,rgba(0,0,0,.05) 22px 24px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:center}
+h1,h2{font-family:Silkscreen,monospace;font-weight:700;line-height:1.05;margin:0;text-wrap:balance}
+h1{font-size:clamp(32px,5.5vw,52px)}
+h2{font-size:26px;margin-bottom:6px}
+.det{margin:20px 0 0;display:grid;gap:10px;font-size:17px}
+.det div{display:flex;gap:12px;align-items:baseline}
+.det b{font-family:Silkscreen,monospace;font-weight:400;font-size:13px;width:58px;flex:none;opacity:.85}
+.det a{color:#fff;text-decoration-thickness:2px;text-underline-offset:3px}
+.nowrap{white-space:nowrap}
+.turkey{width:100%;max-width:360px;justify-self:center;aspect-ratio:24/23;image-rendering:pixelated}
+.turkey svg{width:100%;height:100%;display:block;shape-rendering:crispEdges;filter:drop-shadow(0 6px 0 rgba(0,0,0,.18))}
+.tail{transform-box:view-box;transform-origin:12px 14px;animation:fan 1.6s steps(2) infinite}
+.head{animation:bob .8s steps(1) infinite}
+@keyframes fan{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
+@media(prefers-reduced-motion:reduce){.tail,.head{animation:none}}
+.me{background:var(--panel);border:2px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:8px;margin:18px 0 22px}
+label{font-weight:600}
+input,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
+input:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--mus);outline-offset:2px}
+.hint{color:var(--mute);font-size:14px;margin:0}
+.items{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.it{background:var(--panel);border:2px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;align-items:center}
+.it.full{background:var(--done)}
+.nm{font-weight:600;font-size:17px}
+.slots{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.slot{width:18px;height:18px;border:2px solid var(--pumpd);background:transparent}
+.slot.on{background:var(--pumpd)}.slot.mine{background:var(--mus);border-color:#b8860b}
+.who{grid-column:1/-1;color:var(--mute);font-size:14px}
+.step{display:flex;align-items:center;gap:6px}
+.step button{width:44px;height:44px;border:2px solid var(--ink);background:var(--panel);color:var(--ink);font:700 20px Silkscreen,monospace;border-radius:8px;cursor:pointer}
+.step button:disabled{opacity:.3;cursor:default}
+.step .q{width:26px;text-align:center;font-family:Silkscreen,monospace;font-size:18px}
+.extras{display:grid;gap:8px;margin:12px 0}
+.ex{display:flex;gap:8px}
+.ex button{flex:none;width:44px;height:44px;border:2px solid var(--line);background:var(--panel);color:var(--ink);font:700 18px Silkscreen,monospace;border-radius:8px;cursor:pointer}
+.add{min-height:44px;padding:0 18px;border:2px dashed var(--pumpd);background:transparent;color:var(--pumpd);font:700 15px Silkscreen,monospace;border-radius:8px;cursor:pointer}
+.add:hover{background:var(--pump);color:#fff;border-style:solid}
+.rm{margin-left:8px;min-height:32px;padding:0 10px;border:2px solid var(--pumpd);background:transparent;color:var(--pumpd);font:600 13px "Work Sans",sans-serif;border-radius:6px;cursor:pointer}
+.gate{background:var(--mus);color:#2a160c;padding:14px max(5vw,16px)}
+.gatein{max-width:960px;margin:0 auto;border:2px solid #2a160c;border-radius:10px;padding:14px 16px;display:grid;gap:10px;background:#fbd572}
+.gatein p{margin:0;font-size:16px}
+.gatein a{color:#2a160c;font-weight:600;text-underline-offset:3px}
+.pill{justify-self:start;display:inline-flex;align-items:center;gap:14px;background:#262626;color:#bdbdbd;border:1px solid #3a3a3a;border-radius:12px;padding:8px 8px 8px 14px;font:15px system-ui,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.25);max-width:100%;flex-wrap:wrap}
+.pbtn{background:#3d3d3d;color:#fff;border-radius:7px;padding:5px 10px;font-weight:600;outline:3px solid var(--pump);outline-offset:2px}
+.gate.hide{display:none}
+.menu{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.menu li{background:var(--panel);border:2px solid var(--line);border-radius:10px;padding:6px 14px 6px 8px;font-weight:600;display:flex;align-items:center;gap:10px}
+.menu svg{width:32px;height:32px;flex:none;shape-rendering:crispEdges}
+.status{min-height:22px;font-size:14px;color:var(--mute);margin:10px 0 0}
+.roster{display:grid;gap:8px;margin-top:10px}
+.row{display:grid;grid-template-columns:10em minmax(0,1fr);gap:12px;padding:10px 0;border-bottom:2px dashed var(--line)}
+.row b{overflow-wrap:anywhere}
+.empty{color:var(--mute)}
+.banner{background:var(--mus);color:#2a160c;padding:12px 14px;border-radius:8px;margin:0 0 16px;font-size:15px}
+@media(max-width:600px){.hero .wrap{grid-template-columns:1fr}.turkey{max-width:220px;order:-1}.row{grid-template-columns:1fr;gap:2px}}
+</style>
+</head>
+<body>
+<header class="band hero">
+  <div class="wrap">
+    <div>
+      <h1>Thanksgiving Potluck</h1>
+      <div class="det">
+        <div><b>When</b><span><span class="nowrap">Sat, Nov 28, 2026</span> · starts <span class="nowrap">3 PM</span></span></div>
+        <div><b>Where</b><span>Dain and Kristina's house<br><a href="https://www.google.com/maps/search/?api=1&query=3848+Legion+Lane+Los+Angeles+CA+90039">3848 Legion Lane, Los Angeles, CA 90039</a></span></div>
+      </div>
+    </div>
+    <div class="turkey" role="img" aria-label="Pixel turkey fanning its tail"><svg id="tk" viewBox="0 0 24 23"></svg></div>
+  </div>
+</header>
+
+<main class="band">
+  <div class="wrap">
+    <h2>What's on the menu</h2>
+    <ul class="menu" id="menu"></ul>
+    <h2 style="margin-top:32px">What we still need</h2>
+    <p class="hint">Put your name in, then tap + on what you'll bring. It saves on its own, no login needed.</p>
+    <div class="me">
+      <label for="name">Your name</label>
+      <input id="name" autocomplete="name" placeholder="e.g. Jamie">
+    </div>
+    <ul class="items" id="items"></ul>
+
+    <h2 style="margin-top:32px">Bringing anything else?</h2>
+    <p class="hint">Add a row for each extra dish or drink.</p>
+    <div class="extras" id="extras"></div>
+    <button class="add" id="add" type="button">+ Add something</button>
+    <p class="status" id="status" aria-live="polite"></p>
+
+    <h2 style="margin-top:36px">Who's bringing what</h2>
+    <div class="roster" id="roster"><p class="empty">Nobody yet. Be first.</p></div>
+  </div>
+</main>
+
+<script>
+{
+const ITEMS=[
+ {k:"corn",n:"Cans of corn",q:3},
+ {k:"salad",n:"Bags of salad (undressed)",q:3},
+ {k:"white",n:"Bottles of white wine",q:2},
+ {k:"red",n:"Bottles of red wine",q:2},
+ {k:"gin",n:"Bottle of gin",q:1},
+ {k:"verm",n:"Bottle of sweet red vermouth",q:1},
+ {k:"bread",n:"Bags of Hawaiian bread",q:2},
+ {k:"pie",n:"Pies",q:2}
+];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $=id=>document.getElementById(id);
+
+/* pixel turkey */
+const C={r:"#c62828",o:"#ef6c00",y:"#f9c22e",d:"#5a2d12",b:"#8a4b20",w:"#6b3816",h:"#a8622b",k:"#111",e:"#fff",a:"#f2b631",R:"#d81b1b",L:"#f08a24"};
+let tail="",body="",head="";
+const px=(x,y,c)=>`<rect x="${x}" y="${y}" width="1" height="1" fill="${C[c]}"/>`;
+for(let y=0;y<23;y++)for(let x=0;x<24;x++){
+  const dx=x+.5-12,dy=y+.5-14,d=Math.hypot(dx,dy);
+  if(dy>1||d<5||d>11.2)continue;
+  const ang=Math.atan2(dy,dx),stripe=Math.floor((ang+Math.PI)*4.5)%2;
+  let c=d<6.4?"d":d<8?"y":d<9.6?"o":"r";
+  if(stripe&&c!=="d")c=c==="y"?"a":c==="o"?"L":"R";
+  tail+=px(x,y,c);
+}
+for(let y=0;y<23;y++)for(let x=0;x<24;x++){
+  const ex=(x+.5-12)/4.6,ey=(y+.5-14.5)/5;
+  if(ex*ex+ey*ey<=1){
+    const wing=Math.abs(x+.5-12)>2.6&&y>12&&y<18;
+    body+=px(x,y,wing?"w":y>17?"w":"b");
+  }
+}
+[[11,19],[11,20],[13,19],[13,20]].forEach(([x,y])=>body+=px(x,y,"L"));
+[[10,21],[11,21],[12,21],[13,21],[14,21]].forEach(([x,y])=>body+=px(x,y,"L"));
+for(let y=3;y<11;y++)for(let x=8;x<16;x++){
+  if(Math.hypot(x+.5-12,y+.5-6.5)<=2.9||(y>8&&Math.abs(x+.5-12)<1.6))head+=px(x,y,"h");
+}
+head+=px(10,5,"e")+px(11,5,"k")+px(13,5,"k")+px(14,5,"e")+px(11,7,"a")+px(12,7,"a")+px(12,8,"R")+px(12,9,"R")+px(13,9,"R");
+$("tk").innerHTML=`<g class="tail">${tail}</g><g>${body}</g><g class="head">${head}</g>`;
+
+
+/* menu with pixel icons */
+const PC={s:"#8b3a1e",d:"#4a2210",w:"#f4ead8",b:"#8a5a2b",g:"#6aa84f",G:"#2f6b2f",y:"#f2c230",c:"#f6d14a",k:"#9a8f88",r:"#c62828",B:"#c98a3d",o:"#e8862e",l:"#a9c7d8",e:"#e0a85a"};
+const ICONS={
+ribs:["w.w.w.w.","ssssssss","sdsdsdsd","ssssssss","sdsdsdsd","ssssssss",".w.w.w.w","........"],
+stuffing:["........","..bgby..",".bybgbb.","bgbbybgb","kkkkkkkk",".kkkkkk.","..kkkk..","........"],
+mac:["........","..c..c..",".cyccyc.","cycyccyc","kkkkkkkk",".kkkkkk.","..kkkk..","........"],
+mash:["........","...yy...","..wwww..",".wwwwww.","wwwwwwww","kkkkkkkk",".kkkkkk.","........"],
+salad:["........",".g.G..g.","gGgrGgGg","GgGgrgGg","kkkkkkkk",".kkkkkk.","..kkkk..","........"],
+corn:["...gy...","..gyyy..","..gyyyg.","..yyyyg.",".gyyyyg.",".gyyyg..","..gyg...","...g...."],
+bread:["........","........",".BB..BB.","BeeBBeeB","BeeBBeeB","BBBBBBBB","dddddddd","........"],
+pie:["........","........","......BB","....BBoo","..BBoooo","BBoooooo","BBBBBBBB","........"],
+booze:["..G.....","..G.....",".GGG....",".GGG.l.l",".GwG.lrl",".GGG.lrl",".GGG..l.",".GGG.lll"]};
+const MENU=[["ribs","Ribs"],["stuffing","Stuffing"],["mac","Mac and cheese"],["mash","Mashed potatoes"],["salad","Salad"],["corn","Corn"],["bread","Hawaiian bread"],["pie","Pie"],["booze","Booze"]];
+const icon=k=>`<svg viewBox="0 0 8 8" aria-hidden="true">${ICONS[k].map((row,y)=>[...row].map((ch,x)=>ch==="."?"":`<rect x="${x}" y="${y}" width="1" height="1" fill="${PC[ch]}"/>`).join("")).join("")}</svg>`;
+$("menu").innerHTML=MENU.map(([k,n])=>`<li>${icon(k)}<span>${n}</span></li>`).join("");
+
+/* state */
+const API="/api/claims";
+let myId="",adminKey="",docs={},mine={name:"",items:{},extras:[]},saveT=null,saving=false,pending=false,live=false,dirty=false;
+try{
+  const s=JSON.parse(localStorage.getItem("potluck-me")||"null");if(s){mine.name=s.name||"";myId=s.id||""}
+  adminKey=new URLSearchParams(location.search).get("admin")||localStorage.getItem("potluck-admin")||"";
+  if(adminKey)localStorage.setItem("potluck-admin",adminKey);
+}catch(e){}
+if(!/^[a-z0-9]{20,40}$/.test(myId)){myId=Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(36).padStart(2,"0")).join("").slice(0,28)}
+const remember=()=>{try{localStorage.setItem("potluck-me",JSON.stringify({name:mine.name,id:myId}))}catch(e){}};
+remember();
+$("name").value=mine.name;
+
+const others=k=>Object.entries(docs).filter(([id])=>id!==myId).reduce((t,[,v])=>t+(+(v.items||{})[k]||0),0);
+const status=t=>$("status").textContent=t;
+const extrasOf=v=>(Array.isArray(v.extras)?v.extras:[]).map(x=>String(x).trim()).filter(Boolean);
+const hasAny=v=>Object.values(v.items||{}).some(n=>n>0)||extrasOf(v).length;
+
+function render(){
+  $("items").innerHTML=ITEMS.map(it=>{
+    const o=others(it.k),m=+mine.items[it.k]||0,tot=o+m,full=tot>=it.q;
+    const names=Object.entries(docs).filter(([id])=>id!==myId&&+(docs[id].items||{})[it.k]>0).map(([,v])=>esc(v.name||"Someone")+(v.items[it.k]>1?" ×"+v.items[it.k]:""));
+    if(m)names.push("You"+(m>1?" ×"+m:""));
+    const slots=Array.from({length:it.q},(_,i)=>`<span class="slot ${i<o?"on":i<tot?"mine":""}"></span>`).join("");
+    return `<li class="it${full?" full":""}">
+      <div><div class="nm">${it.q} ${esc(it.n)}</div><div class="slots" aria-label="${tot} of ${it.q} claimed">${slots}</div></div>
+      <div class="step"><button data-k="${it.k}" data-d="-1" aria-label="One less ${esc(it.n)}" ${m<1||!live?"disabled":""}>−</button><span class="q">${m}</span><button data-k="${it.k}" data-d="1" aria-label="One more ${esc(it.n)}" ${tot>=it.q||!live?"disabled":""}>+</button></div>
+      <div class="who">${full?"Covered: ":tot?`${it.q-tot} still needed · `:"Still needed · "}${names.join(", ")||"nobody yet"}</div>
+    </li>`}).join("");
+  const all=Object.entries(docs).map(([id,v])=>[id,id===myId?mine:v]);
+  if(!docs[myId])all.push([myId,mine]);
+  const shown=all.filter(([,v])=>hasAny(v));
+  $("roster").innerHTML=shown.length?shown.map(([id,v])=>{
+    const list=ITEMS.filter(it=>+(v.items||{})[it.k]>0).map(it=>`${v.items[it.k]} × ${esc(it.n.replace(/^(Bags?|Bottles?|Cans?) of /i,""))}`);
+    extrasOf(v).forEach(x=>list.push(esc(x)));
+    const rm=adminKey&&docs[id]?`<button class="rm" data-rm="${esc(id)}" type="button">Remove</button>`:"";
+    return `<div class="row"><b>${esc(v.name||"Someone")}</b><span>${list.join(" · ")} ${rm}</span></div>`}).join(""):`<p class="empty">Nobody yet. Be first.</p>`;
+}
+
+function renderExtras(){
+  $("extras").innerHTML=mine.extras.map((x,i)=>`<div class="ex"><input data-ex="${i}" aria-label="Extra item ${i+1}" placeholder="e.g. pumpkin pie" value="${esc(x)}"><button data-x="${i}" type="button" aria-label="Remove this row">×</button></div>`).join("");
+}
+
+async function load(){
+  try{
+    const r=await fetch(API+(adminKey?"?admin="+encodeURIComponent(adminKey):""),{cache:"no-store"});
+    if(!r.ok)throw 0;
+    const j=await r.json();
+    docs=j.claims||{};
+    if(!live&&docs[myId]){const v=docs[myId];mine.items={...(v.items||{})};mine.extras=extrasOf(v);if(v.name&&!mine.name){mine.name=v.name;$("name").value=v.name;remember()}renderExtras()}
+    else if(live&&!dirty&&!saving&&docs[myId]){mine.items={...(docs[myId].items||{})}}
+    live=true;render();
+  }catch(e){if(!live)status("Couldn't load sign-ups. Refresh to try again.")}
+}
+
+async function save(){
+  if(saving){pending=true;return}
+  saving=true;dirty=false;status("Saving…");
+  try{
+    const r=await fetch(API+(adminKey?"?admin="+encodeURIComponent(adminKey):""),{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:myId,name:mine.name.trim(),items:mine.items,extras:mine.extras})});
+    const j=await r.json().catch(()=>({}));
+    if(r.status===409){status(j.error||"Someone just grabbed that one. Updated the list.");}
+    else if(!r.ok)throw 0;
+    else status("Saved. Thanks!");
+    if(j.claims){docs=j.claims;if(docs[myId])mine.items={...(docs[myId].items||{})};render()}
+  }catch(e){status("Couldn't save that. Try again in a sec.")}
+  saving=false;
+  if(pending){pending=false;save()}
+}
+const queue=()=>{dirty=true;clearTimeout(saveT);saveT=setTimeout(save,500)};
+const needName=()=>{if(mine.name.trim())return false;status("Add your name first so people know who's bringing it.");$("name").focus();return true};
+
+$("items").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-k]");if(!b||needName())return;
+  const k=b.dataset.k,it=ITEMS.find(i=>i.k===k),d=+b.dataset.d;
+  const n=Math.max(0,Math.min(it.q-others(k),(+mine.items[k]||0)+d));
+  mine.items={...mine.items,[k]:n};render();queue();
+});
+$("name").addEventListener("input",e=>{mine.name=e.target.value;remember();render();if(hasAny(mine))queue()});
+$("add").addEventListener("click",()=>{
+  if(needName())return;
+  mine.extras=[...mine.extras,""];renderExtras();
+  $("extras").querySelector(`input[data-ex="${mine.extras.length-1}"]`).focus();
+});
+$("extras").addEventListener("input",e=>{const i=e.target.dataset.ex;if(i==null)return;mine.extras[+i]=e.target.value;render();queue()});
+$("extras").addEventListener("click",e=>{const b=e.target.closest("button[data-x]");if(!b)return;mine.extras.splice(+b.dataset.x,1);renderExtras();render();queue()});
+$("roster").addEventListener("click",async e=>{
+  const b=e.target.closest("button[data-rm]");if(!b)return;
+  if(b.dataset.armed!=="1"){b.dataset.armed="1";b.textContent="Tap again to remove";return}
+  const id=b.dataset.rm;
+  try{const r=await fetch(API+"?id="+encodeURIComponent(id)+"&admin="+encodeURIComponent(adminKey),{method:"DELETE"});if(!r.ok)throw 0;
+    if(id===myId){mine.items={};mine.extras=[];renderExtras()}status("Removed.");load()}catch(err){status("Couldn't remove that.")}
+});
+
+render();load();
+const poll=setInterval(()=>{if(!document.hidden)load()},8000);
+}
+</script>
+</body>
+</html>
